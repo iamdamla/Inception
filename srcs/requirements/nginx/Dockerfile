@@ -1,8 +1,8 @@
 FROM debian:bullseye
 
 
-RUN apt update && \
-    apt upgrade && \
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
     apt install vim nginx -y && \
     mkdir -p /etc/nginx/ssl && \
     apt install openssl -y && \
@@ -17,4 +17,4 @@ RUN chmod 755 /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 
-CMD::CMD [ "nginx", "-g", "daemon off;"]
+CMD [ "nginx", "-g", "daemon off;"]

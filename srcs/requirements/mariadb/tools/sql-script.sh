@@ -1,15 +1,38 @@
-mysql_install_db;
-service mysql start;   
-sleep 0.5
+set -e
+echo "Loading mariadb initialization script..."
+/etc/init.d/mariadb start
 
-mysql -e "CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;" #creates the table
-mysql -e "CREATE USER IF NOT EXISTS \`${SQL_USER}\`@'localhost' IDENTIFIED BY '${SQL_PASSWORD}';"
-mysql -e "GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.*TO \`${SQL_USER}\`@%' IDENTIFIED BY '${SQL_PASSWORD}';"
-sleep 0.5
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';"
-sleep 0.5
-mysql -e "FLUSH PRIVILEGES;"
+if [ -f ./db_configured ]; then
+    echo "mariadb is already configured."
+else
+    until mysqladmin ping &> /dev/null; do
+        sleep 0.5
+    done
 
+    echo "setting root password"
+    mysql -uroot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${ROOT_PASSWORD}');"
+    sleep 0.5
+    mysql -uroot -e "FLUSH PRIVILEGES;"
+    sleep 0.5
+    echo "create database"
+    mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS \`${DATABASE}\`;" #creates the table
+    sleep 0.5
 
-mysqladmin -u root -p${SQL_ROOT_PASSWORD} shutdown
-exec mysqld_safe
+    echo "create user"
+    mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE USER IF NOT EXISTS \`${USER}\`@'localhost';"
+    sleep 0.5
+    mysql -uroot -p"${ROOT_PASSWORD}" -e "SET PASSWORD FOR '${USER}'@'localhost' = PASSWORD('${USER_PASSWORD}');"
+    sleep 0.5
+
+    echo "set '${USER}' priviliges"
+    mysql -uroot -p"${ROOT_PASSWORD}" -e "GRANT ALL PRIVILEGES ON *.* TO '${USER}'@'wordpress.srcs_inception' IDENTIFIED BY '${USER_PASSWORD}';"
+    sleep 0.5
+    mysql -u root -p"${ROOT_PASSWORD}" -e "FLUSH PRIVILEGES;";
+    sleep 0.5
+    touch db_configured
+
+fi
+
+mysqladmin -uroot -p"{ROOT_PASSWORD}" shutdown
+
+exec "$@"

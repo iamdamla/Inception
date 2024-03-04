@@ -15,12 +15,14 @@ RUN cd /var/www && tar -xzf wordpress-6.4.2-fr_FR.tar.gz && rm wordpress-6.4.2-f
 
 RUN chown -R root:root /var/www/wordpress
 
-COPY conf/auto-config.sh ./auto-config.sh
+COPY conf/wp-config.sh ./wp-config.sh
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
+
+CMD ["/bin/bash", "/var/www/html/wp-config.sh"]
 
 
 
