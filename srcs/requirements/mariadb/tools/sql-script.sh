@@ -1,4 +1,6 @@
-set -e
+
+
+
 echo "Loading mariadb initialization script..."
 /etc/init.d/mariadb start
 
