@@ -1,15 +1,5 @@
-
-
-
 echo "Loading mariadb initialization script..."
 /etc/init.d/mariadb start
-
-if [ -f ./db_configured ]; then
-    echo "mariadb is already configured."
-else
-    until mysqladmin ping &> /dev/null; do
-        sleep 0.5
-    done
 
     echo "setting root password"
     mysql -uroot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${ROOT_PASSWORD}');"
@@ -33,7 +23,6 @@ else
     sleep 0.5
     touch db_configured
 
-fi
 
 mysqladmin -uroot -p"{ROOT_PASSWORD}" shutdown
 

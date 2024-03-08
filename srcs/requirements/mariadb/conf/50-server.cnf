@@ -9,5 +9,3 @@ datadir= /var/lib/mysql
 socket= /var/run/mysqld/mysqld.sock
 bind_address=*
 skip-networking=false
-
-
