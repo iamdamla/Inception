@@ -7,7 +7,7 @@ echo "Loading mariadb initialization script..."
     mysql -uroot -e "FLUSH PRIVILEGES;"
     sleep 0.5
     echo "create database"
-    mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS \`${DATABASE}\`;" #creates the table
+    mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS \`${DATABASE}\`;" 
     sleep 0.5
 
     echo "create user"

@@ -1,11 +1,10 @@
-[client-server]
-user=root
-!includedir /etc/mysql/conf.d/
-!includedir /etc/mysql/mariadb.conf.d/
-
 [mysqld]
+user = mysql
 port= 3306
 datadir= /var/lib/mysql
 socket= /var/run/mysqld/mysqld.sock
 bind_address=*
 skip-networking=false
+
+[mysql]
+default-character-set=utf8
