@@ -48,13 +48,13 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/Users/damlaerblang/data/wordpress'
+      device: '/home/derblang/data/wordpress'
   mariadb:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/Users/damlaerblang/data/mariadb' 
+      device: '/home/derblang/data/mariadb' 
   
 networks:
   inception:
